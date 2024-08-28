@@ -1,0 +1,28 @@
+1
+00:00:01,000 --> 00:00:02,166
+curiosity
+
+2
+00:00:02,900 --> 00:00:05,800
+is one of the driving forces of mankind
+
+3
+00:00:06,200 --> 00:00:08,200
+you know modern man
+
+4
+00:00:08,700 --> 00:00:10,066
+is the guy who
+
+5
+00:00:10,566 --> 00:00:14,266
+wanted to explore the world and went into the ship
+
+6
+00:00:14,466 --> 00:00:16,900
+over the ocean without having any idea
+
+7
+00:00:16,900 --> 00:00:18,133
+of what there was
+
