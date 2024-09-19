@@ -32,6 +32,14 @@ from collections import Counter
 
 from main import *
 
+import requests
+import hashlib
+import random
+import json
+
+YOUDAO_API_KEY = '75a7f5c5babf556e'
+YOUDAO_APP_SECRET = 'zi306pwC76MkUOa5kcvKw1deLkeNVTxX'
+
 def remove_extension(file_path):
     # 获取文件名（带扩展名）
     file_name_with_extension = os.path.basename(file_path)
@@ -166,7 +174,38 @@ def generate_new_srt(replaced_subtitles, output_file):
             f.write(f"{timestamps}\n")
             f.write(f"{text}\n\n")
 
-def translate_subtitle(subtitle_src_file_path,subtitle_destination_file_path,target_language="中文",model="gpt4"):
+def encrypt(signStr):
+    hash_algorithm = hashlib.sha256()
+    hash_algorithm.update(signStr.encode('utf-8'))
+    return hash_algorithm.hexdigest()
+
+def truncate(q):
+    if q is None:
+        return None
+    size = len(q)
+    return q if size <= 20 else q[0:10] + str(size) + q[size - 10:size]
+
+def createYoudaoRequest(q, lang_from, lang_to):
+    url = 'https://openapi.youdao.com/api'
+    
+    data = {
+        'appKey': YOUDAO_API_KEY,
+        'q': q,
+        'from': lang_from,
+        'to': lang_to,
+        'salt': str(random.randint(1, 65536)),
+        'signType': 'v3',
+        'curtime': str(int(time.time())),
+    }
+    
+    signStr = YOUDAO_API_KEY + truncate(q) + data['salt'] + data['curtime'] + YOUDAO_APP_SECRET
+    data['sign'] = encrypt(signStr)
+    
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    response = requests.post(url, data=data, headers=headers)
+    return json.loads(response.text)['translation'][0]
+
+def translate_subtitle(subtitle_src_file_path,subtitle_destination_file_path,target_language="zh-CHS",model="youdao"):
     
     with open(subtitle_src_file_path, 'r', encoding='utf-8') as file:
         src_content = file.read()
@@ -181,20 +220,34 @@ def translate_subtitle(subtitle_src_file_path,subtitle_destination_file_path,tar
 
     mm=LLMAPI.ModelManager()
 
-    if(model=="gpt4"):
-        content="把星号中的文本*"+text+"*翻译成"+target_language+',按照下一个星号中的json格式返回，不要有多余输出,返回json中的引号应当为英文双引号 * {"content":"翻译后内容"} *'
-        message=[{
-        "role":"user",
-        "content":content
-        }]
-        ans=mm.Get_Response_OpenAI_GPT4(messages=message)["content"]
+    if model == "youdao":
+        ans = createYoudaoRequest(q=text, lang_from="auto", lang_to=target_language)
     else:
-        content_spark="你是一个很棒的翻译官，把星号中的文本信、达、雅地*"+text+"*翻译成"+target_language+",直接返回翻译结果"
-        message=[{
-            "role":"user",
-            "content":content_spark
-        }]
-        ans=mm.Get_Response_Spark(messages=message)
+        mm = LLMAPI.ModelManager()
+        if model == "gpt4":
+            content = "Translate the following text into " + target_language + ": *" + text + "*"
+            message = [{"role": "user", "content": content}]
+            ans = mm.Get_Response_OpenAI_GPT4(messages=message)["content"]
+        else:
+            content_spark = "Translate the following text into " + target_language + ": *" + text + "*"
+            message = [{"role": "user", "content": content_spark}]
+            ans = mm.Get_Response_Spark(messages=message)
+            
+    
+    # if(model=="gpt4"):
+    #     content="把星号中的文本*"+text+"*翻译成"+target_language+',按照下一个星号中的json格式返回，不要有多余输出,返回json中的引号应当为英文双引号 * {"content":"翻译后内容"} *'
+    #     message=[{
+    #     "role":"user",
+    #     "content":content
+    #     }]
+    #     ans=mm.Get_Response_OpenAI_GPT4(messages=message)["content"]
+    # else:
+    #     content_spark="你是一个很棒的翻译官，把星号中的文本信、达、雅地*"+text+"*翻译成"+target_language+",直接返回翻译结果"
+    #     message=[{
+    #         "role":"user",
+    #         "content":content_spark
+    #     }]
+    #     ans=mm.Get_Response_Spark(messages=message)
 
     
     # 步骤 1: 解析 SRT 文件
@@ -275,8 +328,8 @@ def srtTranTest():
     # 没问题，改一下路径就可以
     # 调用星火/openai接口
     # 如果用openai接口需要取LLMAPI文件中添加key，可以设置不同的模型
-    path ="D:\superADS\VideoTranslation\\video-subtitle-remover\\video-subtitle-remover\\test\\test5\\test5.srt"
-    output_path ="D:\superADS\VideoTranslation\\video-subtitle-remover\\video-subtitle-remover\\test\\test5\\test5_trans.srt"
+    path ="../test/test5/test5.srt"
+    output_path ="../test/test5/test5_trans.srt"
     translate_subtitle(subtitle_src_file_path=path,subtitle_destination_file_path=output_path,model="星火")
 
 def translatedTextToSrtTest():
@@ -297,6 +350,7 @@ def translatedTextToSrtTest():
 
     # 步骤 4: 生成新的 SRT 文件
     generate_new_srt(replaced_subtitles, subtitle_destination_file_path)
+    
 
 if __name__ == '__main__':
     srtTranTest()
