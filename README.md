@@ -80,19 +80,17 @@ The subtitle translation workflow is integrated into **ComfyUI**. Follow these s
 
 
 ## Common Issues
-1. **Slow Processing Speed**: Adjust the configuration in backend/config.py to use the STTN algorithm for faster processing:__
+1. **Slow Processing Speed**: Adjust the configuration in backend/config.py to use the **STTN** algorithm for faster processing:__
 ```
 MODE = InpaintMode.STTN
 STTN_SKIP_DETECTION = True
 ```
-2. **Unsatisfactory Removal Results**:__
-* Use different algorithms like **LAMA or PROPAINTER** in the config.py file.
-* Adjust STTN_NEIGHBOR_STRIDE and STTN_REFERENCE_LENGTH for better results.
+2. **Unsatisfactory Removal Results**:
+* Use different algorithms like **LAMA or PROPAINTER** in the `config.py` file.
+* Adjust `STTN_NEIGHBOR_STRIDE` and `STTN_REFERENCE_LENGTH` for better results.
 
-3. **CondaHTTPError**:Place the .condarc file from the project in the user directory (e.g., 
-```
-C:/Users/<your_username>).
-```
+3. **CondaHTTPError**:Place the `.condarc` file from the project in the user directory (e.g., `C:/Users/<your_username>`).
+
 4. **7z File Extraction Error**: Upgrade the 7-zip extraction program.
 ```
 pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118
@@ -122,7 +120,7 @@ conda activate videoEnv
 Ensure Python 3.8+ is installed, and use conda to create and activate the environment.
 
 * **Install CUDA** and **cuDNN**:
-## Linux Installation  
+**Linux Installatio** 
 1.Download CUDA 11.7:
 ```
 wget https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda_11.7.0_515.43.04_linux.run
@@ -145,7 +143,7 @@ sudo chmod a+r /usr/local/cuda-11.7/lib64/*
 sudo chmod a+r /usr/local/cuda-11.7/include/*
 ```
 
-## Windows Installation
+**Windows Installation**
 1. Download CUDA 11.7:
 
 Download CUDA
@@ -172,7 +170,6 @@ python -m pip install paddlepaddle-gpu==2.4.2.post117 -f https://www.paddlepaddl
 conda install pytorch==2.1.0 torchvision==0.16.0 pytorch-cuda=11.8 -c pytorch -c nvidia
 
 # pip installation
-```
 pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118
 ```
 
