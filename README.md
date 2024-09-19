@@ -1,3 +1,9 @@
+## Project Overview
+
+This project is based on the [Video Subtitle Remover](https://github.com/YaoFANGUK/video-subtitle-remover) developed by YaoFANGUK. It expands upon the original work by integrating additional features such as automated subtitle translation and further improvements in AI-based subtitle removal techniques.
+
+The original project laid the groundwork for efficiently removing hardcoded subtitles, and this version builds on that with enhancements like support for various algorithms (STTN, LAMA, PROPAINTER) and integration with ComfyUI for improved usability.
+
 # Video-Subtitle-Remover (VSR)
 
 ![License](https://img.shields.io/badge/License-Apache%202-red.svg)
@@ -78,13 +84,107 @@ The subtitle translation workflow is integrated into **ComfyUI**. Follow these s
 MODE = InpaintMode.STTN
 STTN_SKIP_DETECTION = True
 ```
-2. Unsatisfactory Removal Results:__
+2. **Unsatisfactory Removal Results**:__
 * Use different algorithms like **LAMA or PROPAINTER** in the config.py file.
 * Adjust STTN_NEIGHBOR_STRIDE and STTN_REFERENCE_LENGTH for better results.
 
-3. CondaHTTPError:Place the .condarc file from the project in the user directory (e.g., 
+3. **CondaHTTPError**:Place the .condarc file from the project in the user directory (e.g., 
 ```
 C:/Users/<your_username>).
 ```
+4. **7z File Extraction Error**: Upgrade the 7-zip extraction program.
+```
+pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118
+```
 
 
+## Installation Guide
+### 1. Download and Install Miniconda
+* **Windows**: Miniconda3-py38_4.11.0-Windows-x86_64.exe
+* **Linux**: Miniconda3-py38_4.11.0-Linux-x86_64.sh
+### 2. Create and Activate a Virtual Environment
+Switch to the source code directory:
+```
+cd <source_code_directory>
+```
+For example, if your source code is in the `tools` folder on drive D, and the source code folder is `video-subtitle-remover`:
+```
+cd D:/tools/video-subtitle-remover-main
+```
+Create and activate the Conda environment:
+```
+conda create -n videoEnv python=3.8
+conda activate videoEnv
+```
+
+### 3. Install Dependencies
+Ensure Python 3.8+ is installed, and use conda to create and activate the environment.
+
+* **Install CUDA** and **cuDNN**:
+## Linux Installation  
+1.Download CUDA 11.7:
+```
+wget https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda_11.7.0_515.43.04_linux.run
+```
+2. Install CUDA 11.7:
+```
+sudo sh cuda_11.7.0_515.43.04_linux.run
+```
+Add the following content to ~/.bashrc:
+```
+export PATH=/usr/local/cuda-11.7/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+```
+3. Install cuDNN
+```
+tar -xf cudnn-linux-x86_64-8.4.1.50_cuda11.6-archive.tar.xz
+sudo cp ./cuda/include/* /usr/local/cuda-11.7/include/
+sudo cp ./cuda/lib/* /usr/local/cuda-11.7/lib64/
+sudo chmod a+r /usr/local/cuda-11.7/lib64/*
+sudo chmod a+r /usr/local/cuda-11.7/include/*
+```
+
+## Windows Installation
+1. Download CUDA 11.7:
+
+Download CUDA
+
+2. Install cuDNN:
+
+* Unzip `cudnn-windows-x64-v8.2.4.15.zip`, then move all files in "bin, include, lib" to:
+```
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\
+```
+
+* **Install PaddlePaddle (GPU)**:
+```
+# Windows
+python -m pip install paddlepaddle-gpu==2.4.2.post117 -f https://www.paddlepaddle.org.cn/whl/windows/mkl/avx/stable.html
+
+# Linux
+python -m pip install paddlepaddle-gpu==2.4.2.post117 -f https://www.paddlepaddle.org.cn/whl/linux/mkl/avx/stable.html
+```
+
+* **Install Pytorch (GPU)**:
+```
+# Conda installation
+conda install pytorch==2.1.0 torchvision==0.16.0 pytorch-cuda=11.8 -c pytorch -c nvidia
+
+# pip installation
+pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118
+```
+
+* **Install Other Dependencies**:
+```
+pip install -r requirements.txt
+```
+
+4. Run the Program
+* **Run GUI**:
+```
+python gui.py
+```
+* **Run CLI**:
+```
+python ./backend/main.py
+```
