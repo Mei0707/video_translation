@@ -2,7 +2,7 @@
 
 This project is based on the [Video Subtitle Remover](https://github.com/YaoFANGUK/video-subtitle-remover) developed by YaoFANGUK. It expands upon the original work by integrating additional features such as automated subtitle translation and further improvements in AI-based subtitle removal techniques.
 
-The original project laid the groundwork for efficiently removing hardcoded subtitles, and this version builds on that with enhancements like support for various algorithms (STTN, LAMA, PROPAINTER) and integration with ComfyUI for improved usability.
+The original project laid the groundwork for efficiently removing hardcoded subtitles, and this version builds on that with enhancements like support for various algorithms (**STTN, LAMA, PROPAINTER**) and integration with **ComfyUI** for improved usability.
 
 # Video-Subtitle-Remover (VSR)
 
@@ -34,14 +34,15 @@ Video-Subtitle-Remover (VSR) is an AI-based software that removes hardcoded subt
 
 - **CLI Example**:
 
-```bash
+```
 python ./backend/main.py
+```
 
 
 ## New Subtitle Translation Feature
 
 
-In addition to subtitle removal, this project supports **automated subtitle translation** using the **Youdao Translation API**. The workflow includes:__
+In addition to subtitle removal, this project supports **automated subtitle translation** using the **Youdao Translation API**. The workflow includes:
 
 1. **Input**: Video URL and target language.__
 2. **Subtitle** Detection: Extract hardcoded subtitles.__
@@ -171,6 +172,7 @@ python -m pip install paddlepaddle-gpu==2.4.2.post117 -f https://www.paddlepaddl
 conda install pytorch==2.1.0 torchvision==0.16.0 pytorch-cuda=11.8 -c pytorch -c nvidia
 
 # pip installation
+```
 pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118
 ```
 
